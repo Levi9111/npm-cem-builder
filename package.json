@@ -31,6 +31,9 @@
     "typescript": "^5.0.4",
     "typescript-eslint": "^8.0.0-alpha.34"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18.0.0"
   }
