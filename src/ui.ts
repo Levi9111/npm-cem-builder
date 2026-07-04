@@ -8,41 +8,43 @@
 
 // ─── ANSI PRIMITIVES ─────────────────────────────────────────────────────────
 const ESC = '\x1b[';
-const R   = '\x1b[0m'; // reset
+const R = '\x1b[0m'; // reset
 
 const CODES = {
-  bold:          `${ESC}1m`,
-  dim:           `${ESC}2m`,
-  cyan:          `${ESC}36m`,
-  green:         `${ESC}32m`,
-  yellow:        `${ESC}33m`,
-  magenta:       `${ESC}35m`,
-  gray:          `${ESC}90m`,
-  white:         `${ESC}37m`,
-  brightCyan:    `${ESC}96m`,
-  brightGreen:   `${ESC}92m`,
-  brightYellow:  `${ESC}93m`,
+  bold: `${ESC}1m`,
+  dim: `${ESC}2m`,
+  cyan: `${ESC}36m`,
+  green: `${ESC}32m`,
+  yellow: `${ESC}33m`,
+  magenta: `${ESC}35m`,
+  gray: `${ESC}90m`,
+  white: `${ESC}37m`,
+  brightCyan: `${ESC}96m`,
+  brightGreen: `${ESC}92m`,
+  brightYellow: `${ESC}93m`,
   brightMagenta: `${ESC}95m`,
-  brightWhite:   `${ESC}97m`,
-  bgCyan:        `${ESC}46m`,
+  brightWhite: `${ESC}97m`,
+  bgCyan: `${ESC}46m`,
 };
 
 // Check if the terminal supports color (respects NO_COLOR and non-TTY pipes)
 const NO_COLOR = !process.stdout.isTTY || !!process.env.NO_COLOR;
-const paint = (code: string, str: string) => NO_COLOR ? str : `${code}${str}${R}`;
+const paint = (code: string, str: string) =>
+  NO_COLOR ? str : `${code}${str}${R}`;
 
-export const bold    = (s: string) => paint(CODES.bold,          s);
-export const dim     = (s: string) => paint(CODES.dim,           s);
-export const cyan    = (s: string) => paint(CODES.brightCyan,    s);
-export const green   = (s: string) => paint(CODES.brightGreen,   s);
-export const yellow  = (s: string) => paint(CODES.brightYellow,  s);
-export const gray    = (s: string) => paint(CODES.gray,          s);
-export const white   = (s: string) => paint(CODES.brightWhite,   s);
+export const bold = (s: string) => paint(CODES.bold, s);
+export const dim = (s: string) => paint(CODES.dim, s);
+export const cyan = (s: string) => paint(CODES.brightCyan, s);
+export const green = (s: string) => paint(CODES.brightGreen, s);
+export const yellow = (s: string) => paint(CODES.brightYellow, s);
+export const gray = (s: string) => paint(CODES.gray, s);
+export const white = (s: string) => paint(CODES.brightWhite, s);
 export const magenta = (s: string) => paint(CODES.brightMagenta, s);
 
 // Strip ANSI codes — used to compute visible string length for box padding
+// eslint-disable-next-line no-control-regex
 const stripAnsi = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, '');
-const visLen    = (s: string) => stripAnsi(s).length;
+const visLen = (s: string) => stripAnsi(s).length;
 
 // ─── BADGE ───────────────────────────────────────────────────────────────────
 export const badge = (text: string) =>
@@ -53,11 +55,13 @@ export const badge = (text: string) =>
 // ─── BANNER ───────────────────────────────────────────────────────────────────
 export function printBanner(version = '') {
   const line = gray('─'.repeat(52));
-  const ver  = version ? gray(`v${version}`) : '';
+  const ver = version ? gray(`v${version}`) : '';
   console.log();
   console.log(line);
   console.log();
-  console.log(`  ${badge('CEM')}  ${bold(cyan('create-express-modular'))}  ${ver}`);
+  console.log(
+    `  ${badge('CEM')}  ${bold(cyan('create-express-modular'))}  ${ver}`,
+  );
   console.log();
   console.log(`  ${gray('Modular Express + TypeScript — production-ready')}`);
   console.log();
@@ -119,7 +123,7 @@ export function spinner(label: string): Spinner {
     process.stdout.write(`  … ${label}\n`);
     return {
       succeed: (msg: string) => success(msg),
-      fail:    (msg: string) => err(msg),
+      fail: (msg: string) => err(msg),
     };
   }
 
@@ -139,8 +143,14 @@ export function spinner(label: string): Spinner {
   };
 
   return {
-    succeed(msg: string) { stop(); success(msg); },
-    fail(msg: string)    { stop(); err(msg);     },
+    succeed(msg: string) {
+      stop();
+      success(msg);
+    },
+    fail(msg: string) {
+      stop();
+      err(msg);
+    },
   };
 }
 
@@ -153,16 +163,25 @@ interface SummaryOpts {
   docker: boolean;
 }
 
-export function printSummary({ name, db, validator, auth, docker }: SummaryOpts) {
+export function printSummary({
+  name,
+  db,
+  validator,
+  auth,
+  docker,
+}: SummaryOpts) {
   const W = 48; // inner width (between the │ borders)
 
   const border = (l: string, m: string, r: string) =>
     `  ${gray(l + '─'.repeat(W) + r)}`;
 
-  const blankRow = () =>
-    `  ${gray('│')}${' '.repeat(W)}${gray('│')}`;
+  const blankRow = () => `  ${gray('│')}${' '.repeat(W)}${gray('│')}`;
 
-  const dataRow = (label: string, value: string, colorFn: (s: string) => string = cyan) => {
+  const dataRow = (
+    label: string,
+    value: string,
+    colorFn: (s: string) => string = cyan,
+  ) => {
     const labelStr = gray(label.padEnd(14));
     const valueStr = colorFn(value);
     const pad = ' '.repeat(Math.max(0, W - 16 - visLen(value)));
@@ -179,11 +198,11 @@ export function printSummary({ name, db, validator, auth, docker }: SummaryOpts)
   console.log(blankRow());
   console.log(border('├', '─', '┤'));
   console.log(blankRow());
-  console.log(dataRow('Name',      name,                  white));
-  console.log(dataRow('Database',  db,                    cyan));
-  console.log(dataRow('Validator', validator,              magenta));
-  console.log(dataRow('Auth',      auth   ? 'yes' : 'no', auth   ? green : gray));
-  console.log(dataRow('Docker',    docker ? 'yes' : 'no', docker ? green : gray));
+  console.log(dataRow('Name', name, white));
+  console.log(dataRow('Database', db, cyan));
+  console.log(dataRow('Validator', validator, magenta));
+  console.log(dataRow('Auth', auth ? 'yes' : 'no', auth ? green : gray));
+  console.log(dataRow('Docker', docker ? 'yes' : 'no', docker ? green : gray));
   console.log(blankRow());
   console.log(border('╰', '─', '╯'));
   console.log();
@@ -208,24 +227,32 @@ export function printNextSteps(projectName: string) {
 // ─── UPDATE NOTICE ───────────────────────────────────────────────────────────
 export function printUpdateNotice(current: string, latest: string, pm = 'npm') {
   const W = 52;
-  const border = (l: string, m: string, r: string) => `  ${yellow(l + '─'.repeat(W) + r)}`;
+  const border = (l: string, m: string, r: string) =>
+    `  ${yellow(l + '─'.repeat(W) + r)}`;
   const blankRow = () => `  ${yellow('│')}${' '.repeat(W)}${yellow('│')}`;
 
   console.log();
   console.log(border('╭', '─', '╮'));
   console.log(blankRow());
-  
+
   const title = `Update available! ${dim(current)} → ${green(latest)}`;
   const pad1 = ' '.repeat(Math.max(0, W - visLen(title) - 4));
   console.log(`  ${yellow('│')}    ${title}${pad1}${yellow('│')}`);
-  
+
   console.log(blankRow());
-  
-  const globalCmd = ({ npm: 'npm i -g', yarn: 'yarn global add', pnpm: 'pnpm add -g' } as Record<string, string>)[pm] || 'npm i -g';
+
+  const globalCmd =
+    (
+      {
+        npm: 'npm i -g',
+        yarn: 'yarn global add',
+        pnpm: 'pnpm add -g',
+      } as Record<string, string>
+    )[pm] || 'npm i -g';
   const cmd = `Run ${cyan(`${globalCmd} create-express-modular`)} to update`;
   const pad2 = ' '.repeat(Math.max(0, W - visLen(cmd) - 4));
   console.log(`  ${yellow('│')}    ${cmd}${pad2}${yellow('│')}`);
-  
+
   console.log(blankRow());
   console.log(border('╰', '─', '╯'));
   console.log();
@@ -234,16 +261,25 @@ export function printUpdateNotice(current: string, latest: string, pm = 'npm') {
 // ─── MODULE GENERATOR OUTPUT ─────────────────────────────────────────────────
 export function printModuleBanner() {
   console.log();
-  console.log(`  ${cyan('◆')}  ${bold(white('CEM'))}  ${gray('module generator')}`);
+  console.log(
+    `  ${cyan('◆')}  ${bold(white('CEM'))}  ${gray('module generator')}`,
+  );
   console.log();
 }
 
-export function printModuleSuccess(moduleName: string, routePath: string, validator: string, extras: string[] = []) {
+export function printModuleSuccess(
+  moduleName: string,
+  routePath: string,
+  validator: string,
+  extras: string[] = [],
+) {
   console.log();
   success(`Module ${bold(cyan(moduleName))} created`);
   console.log();
   substep(`src/app/modules/${moduleName}/`);
-  substep(`  ${gray('→')} controller, service, route, model, interface, validation`);
+  substep(
+    `  ${gray('→')} controller, service, route, model, interface, validation`,
+  );
   extras.forEach((f) => substep(`  ${gray('→')} ${f}`));
   console.log();
   console.log(`  ${gray('Route:')}      ${cyan(routePath)}`);

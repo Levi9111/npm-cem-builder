@@ -61,6 +61,7 @@ exports.white = white;
 const magenta = (s) => paint(CODES.brightMagenta, s);
 exports.magenta = magenta;
 // Strip ANSI codes — used to compute visible string length for box padding
+// eslint-disable-next-line no-control-regex
 const stripAnsi = (s) => s.replace(/\x1b\[[0-9;]*m/g, '');
 const visLen = (s) => stripAnsi(s).length;
 // ─── BADGE ───────────────────────────────────────────────────────────────────
@@ -138,11 +139,17 @@ function spinner(label) {
         process.stdout.write(`\r${pad}\r`);
     };
     return {
-        succeed(msg) { stop(); success(msg); },
-        fail(msg) { stop(); err(msg); },
+        succeed(msg) {
+            stop();
+            success(msg);
+        },
+        fail(msg) {
+            stop();
+            err(msg);
+        },
     };
 }
-function printSummary({ name, db, validator, auth, docker }) {
+function printSummary({ name, db, validator, auth, docker, }) {
     const W = 48; // inner width (between the │ borders)
     const border = (l, m, r) => `  ${(0, exports.gray)(l + '─'.repeat(W) + r)}`;
     const blankRow = () => `  ${(0, exports.gray)('│')}${' '.repeat(W)}${(0, exports.gray)('│')}`;
@@ -196,7 +203,11 @@ function printUpdateNotice(current, latest, pm = 'npm') {
     const pad1 = ' '.repeat(Math.max(0, W - visLen(title) - 4));
     console.log(`  ${(0, exports.yellow)('│')}    ${title}${pad1}${(0, exports.yellow)('│')}`);
     console.log(blankRow());
-    const globalCmd = { npm: 'npm i -g', yarn: 'yarn global add', pnpm: 'pnpm add -g' }[pm] || 'npm i -g';
+    const globalCmd = {
+        npm: 'npm i -g',
+        yarn: 'yarn global add',
+        pnpm: 'pnpm add -g',
+    }[pm] || 'npm i -g';
     const cmd = `Run ${(0, exports.cyan)(`${globalCmd} create-express-modular`)} to update`;
     const pad2 = ' '.repeat(Math.max(0, W - visLen(cmd) - 4));
     console.log(`  ${(0, exports.yellow)('│')}    ${cmd}${pad2}${(0, exports.yellow)('│')}`);

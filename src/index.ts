@@ -157,7 +157,9 @@ export function runBuild(): void {
   const mwResult = runMiddlewareGuard(projectRoot);
   if (mwResult.hasError) {
     ui.nl();
-    ui.abort('Build aborted — all middleware files must follow the <name>.middleware.ts convention.');
+    ui.abort(
+      'Build aborted — all middleware files must follow the <name>.middleware.ts convention.',
+    );
   }
   ui.success('Middleware naming convention valid.');
   ui.nl();
@@ -166,10 +168,7 @@ export function runBuild(): void {
   ui.step('Running Architecture Guard…');
   ui.nl();
 
-  const {
-    hasError,
-    warnCount
-  } = runArchitectureGuard(projectRoot);
+  const { hasError, warnCount } = runArchitectureGuard(projectRoot);
 
   if (hasError) {
     ui.nl();
@@ -178,7 +177,10 @@ export function runBuild(): void {
 
   if (warnCount > 0) {
     ui.nl();
-    ui.step('Architecture Guard', `passed with ${warnCount} warning${warnCount > 1 ? 's' : ''}`);
+    ui.step(
+      'Architecture Guard',
+      `passed with ${warnCount} warning${warnCount > 1 ? 's' : ''}`,
+    );
   } else {
     ui.success('Architecture validation passed.');
   }
@@ -194,7 +196,7 @@ export function runBuild(): void {
   try {
     execSync('node_modules/.bin/tsc', {
       stdio: 'inherit',
-      cwd: projectRoot
+      cwd: projectRoot,
     });
     ui.success(`Build successful.  ${ui.gray(Date.now() - t + 'ms')}`);
     ui.nl();

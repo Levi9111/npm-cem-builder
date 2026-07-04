@@ -43,7 +43,7 @@ interface SummaryOpts {
     auth: boolean;
     docker: boolean;
 }
-export declare function printSummary({ name, db, validator, auth, docker }: SummaryOpts): void;
+export declare function printSummary({ name, db, validator, auth, docker, }: SummaryOpts): void;
 export declare function printNextSteps(projectName: string): void;
 export declare function printUpdateNotice(current: string, latest: string, pm?: string): void;
 export declare function printModuleBanner(): void;

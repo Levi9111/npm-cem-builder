@@ -186,7 +186,7 @@ function runBuild() {
     try {
         (0, child_process_1.execSync)('node_modules/.bin/tsc', {
             stdio: 'inherit',
-            cwd: projectRoot
+            cwd: projectRoot,
         });
         ui.success(`Build successful.  ${ui.gray(Date.now() - t + 'ms')}`);
         ui.nl();

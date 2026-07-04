@@ -10,7 +10,10 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "lint": "eslint \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
   },
   "keywords": [
     "cem",
@@ -20,8 +23,13 @@
   "author": "levi9111",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
     "@types/node": "^18.16.0",
-    "typescript": "^5.0.4"
+    "eslint": "^9.6.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.0.4",
+    "typescript-eslint": "^8.0.0-alpha.34"
   },
   "engines": {
     "node": ">=18.0.0"
