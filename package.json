@@ -1,0 +1,29 @@
+{
+  "name": "@cem/builder",
+  "version": "1.0.0",
+  "description": "The TypeScript compiler and architectural guard for create-express-modular",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "cem",
+    "create-express-modular",
+    "builder"
+  ],
+  "author": "levi9111",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "typescript": "^5.0.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
