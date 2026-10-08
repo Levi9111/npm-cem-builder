@@ -1,5 +1,5 @@
 {
-  "name": "@cem/builder",
+  "name": "@levi9111/builder",
   "version": "1.0.0",
   "description": "The TypeScript compiler and architectural guard for create-express-modular",
   "main": "dist/index.js",

@@ -27,7 +27,11 @@ npm install @cem/builder --save-dev
 You can import and run the builder or individual guards programmatically in your scripts:
 
 ```typescript
-import { runBuild, runArchitectureGuard, runMiddlewareGuard } from '@cem/builder';
+import {
+  runBuild,
+  runArchitectureGuard,
+  runMiddlewareGuard,
+} from '@cem/builder';
 
 // Run the full build process (includes guards and compilation)
 runBuild();
